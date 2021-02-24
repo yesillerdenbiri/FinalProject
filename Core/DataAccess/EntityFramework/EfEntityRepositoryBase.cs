@@ -1,25 +1,25 @@
 ﻿using Core.Entities;
-using Microsoft.EntityFrameworkCore; //DbContext
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Core.DataAccess.EntityFramework  //T--->Tablo
+namespace Core.DataAccess.EntityFramework
 {
     public class EfEntityRepositoryBase<TEntity,TContext>: IEntityRepository<TEntity>
-        where TEntity: class, IEntity,new()
-        where TContext : DbContext, new()
+        where TEntity: class, IEntity, new()
+        where TContext : DbContext,new()
     {
-        public void Add(TEntity entity)
+        public void Add(TEntity entity) 
         {
-            //IDisposable patern implementation of c#
+            //IDisposable pattern implementation of c#
             using (TContext context = new TContext())
             {
                 var addedEntity = context.Entry(entity);
                 addedEntity.State = EntityState.Added;
-                context.SaveChanges(); //
+                context.SaveChanges();
             }
         }
 
@@ -29,7 +29,7 @@ namespace Core.DataAccess.EntityFramework  //T--->Tablo
             {
                 var deletedEntity = context.Entry(entity);
                 deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges(); //
+                context.SaveChanges();
             }
         }
 
@@ -45,13 +45,10 @@ namespace Core.DataAccess.EntityFramework  //T--->Tablo
         {
             using (TContext context = new TContext())
             {
-                return filter == null ? context.Set<TEntity>().ToList() : context.Set<TEntity>().Where(filter).ToList();
+                return filter == null
+                    ? context.Set<TEntity>().ToList()
+                    : context.Set<TEntity>().Where(filter).ToList();
             }
-        }
-
-        public List<TEntity> GetAllByCategory(int categoryId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Update(TEntity entity)
@@ -60,7 +57,7 @@ namespace Core.DataAccess.EntityFramework  //T--->Tablo
             {
                 var updatedEntity = context.Entry(entity);
                 updatedEntity.State = EntityState.Modified;
-                context.SaveChanges(); //
+                context.SaveChanges();
             }
         }
     }
